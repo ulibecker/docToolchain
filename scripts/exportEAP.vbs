@@ -257,9 +257,7 @@
         ' Iterate through all model nodes
         For Each currentModel In Repository.Models
             ' Iterate through all child packages and save out their diagrams
-			Wscript.echo currentModel.name
-			Wscript.echo modelName
-			If (currentModel.Name = modelName) Then
+			If (modelName = "" OR currentModel.Name = modelName) Then
 				For Each childPackage In currentModel.Packages
 					call DumpDiagrams(childPackage,currentModel)
 				Next
@@ -271,9 +269,9 @@
 	
 	If (Wscript.Arguments.count > 0) Then
 		modelName = Wscript.Arguments.Item(0)
+		Wscript.echo "Exporting only for model " & modelName
 	End If
 	
-	Wscript.echo "Model Name " & modelName
 	
   set fso = CreateObject("Scripting.fileSystemObject") 
   WScript.echo "Image extractor"
