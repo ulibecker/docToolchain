@@ -6,6 +6,9 @@
     Dim FS 'As Scripting.FileSystemObject
 
     Dim projectInterface 'As EA.Project
+	
+	Dim modelName
+
     
     Const   ForAppending = 8
     
@@ -254,14 +257,24 @@
         ' Iterate through all model nodes
         For Each currentModel In Repository.Models
             ' Iterate through all child packages and save out their diagrams
-            For Each childPackage In currentModel.Packages
-                call DumpDiagrams(childPackage,currentModel)
-            Next
+			Wscript.echo currentModel.name
+			Wscript.echo modelName
+			If (currentModel.Name = modelName) Then
+				For Each childPackage In currentModel.Packages
+					call DumpDiagrams(childPackage,currentModel)
+				Next
+			End If
         Next
       End If
       EAapp.Repository.CloseFile()
     End Sub
-
+	
+	If (Wscript.Arguments.count > 0) Then
+		modelName = Wscript.Arguments.Item(0)
+	End If
+	
+	Wscript.echo "Model Name " & modelName
+	
   set fso = CreateObject("Scripting.fileSystemObject") 
   WScript.echo "Image extractor"
   WScript.echo "looking for .eap files in " & fso.GetAbsolutePathName(".") & "/src"
